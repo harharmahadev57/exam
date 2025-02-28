@@ -98,3 +98,16 @@ Base.metadata.drop_all(bind=engine)  # 🔥 टेबल को ड्रॉप 
 Base.metadata.create_all(bind=engine)  # ✅ नई टेबल बनाएगा File "/opt/render/project/src/backend/venv/lib/python3.11/site-packages/sqlalchemy/sql/schema.py", line 462, in _new
     raise exc.InvalidRequestError(
 sqlalchemy.exc.InvalidRequestError: Table 'students' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
+
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
+class Student(Base):
+    __tablename__ = "students"
+    __table_args__ = {"extend_existing": True}  # ✅ सही spacing
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    email = Column(String, unique=True, index=True)

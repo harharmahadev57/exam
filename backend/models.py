@@ -54,3 +54,21 @@ class OMRResponse(Base):
 
     student = relationship("Student")
     exam = relationship("Exam")
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+import os
+from dotenv import load_dotenv
+
+# .env फाइल लोड करें
+load_dotenv()
+
+# डेटाबेस URL लोड करें
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# SQLAlchemy इंजन सेटअप करें
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# ✅ Base को सही से डिफाइन करें
+Base = declarative_base()

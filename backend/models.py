@@ -100,7 +100,6 @@ Base.metadata.create_all(bind=engine)  # ✅ नई टेबल बनाएग
 sqlalchemy.exc.InvalidRequestError: Table 'students' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
 
 
-
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 

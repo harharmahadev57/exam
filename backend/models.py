@@ -1,34 +1,22 @@
- File "/opt/render/project/src/backend/venv/lib/python3.11/site-packages/sqlalchemy/sql/schema.py", line 462, in _new
-    raise exc.InvalidRequestError(
-sqlalchemy.exc.InvalidRequestError: Table 'students' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object. File "/opt/render/project/src/backend/venv/lib/python3.11/site-packages/sqlalchemy/sql/schema.py", line 462, in _new
-    raise exc.InvalidRequestError(
-sqlalchemy.exc.InvalidRequestError: Table 'students' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.from sqlalchemy import Column, Integer, String
-from database import Base
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
+from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy import create_engine
+
+Base = declarative_base()
 
 class Student(Base):
     __tablename__ = "students"
+    __table_args__ = {"extend_existing": True}  # पहले से बनी टेबल अपडेट करने के लिए
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
     phone = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
-
-
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
-from database import Base
-
-class Student(Base):
-    __tablename__ = "students"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    email = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)
     class_name = Column(String, nullable=False)
 
     exams = relationship("Exam", back_populates="student")
+
 
 class Exam(Base):
     __tablename__ = "exams"
@@ -42,11 +30,6 @@ class Exam(Base):
     student = relationship("Student", back_populates="exams")
 
 
-
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
-from sqlalchemy.orm import relationship
-from database import Base
-
 class OMRResponse(Base):
     __tablename__ = "omr_responses"
 
@@ -59,56 +42,9 @@ class OMRResponse(Base):
     student = relationship("Student")
     exam = relationship("Exam")
 
-
-
-from database import Base
-from sqlalchemy import Column, Integer, String
-
-class Student(Base):
-    __tablename__ = "students"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    email = Column(String, unique=True, index=True)
-
-
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import declarative_base
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-Base = declarative_base()
-
-class Student(Base):
-    __tablename__ = "students"
-    __table_args__ = {"extend_existing": True}  # ✅ सही तरीका
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    email = Column(String, unique=True, index=True)
-
-# ✅ मैन्युअली टेबल अपडेट करें
+# ✅ डेटाबेस से कनेक्ट करें
 DATABASE_URL = "postgresql://your_username:your_password@your_db_host/your_db_name"
 engine = create_engine(DATABASE_URL)
-Base.metadata.drop_all(bind=engine)  # 🔥 टेबल को ड्रॉप करके रीक्रिएट करेगा
-Base.metadata.create_all(bind=engine)  # ✅ नई टेबल बनाएगा File "/opt/render/project/src/backend/venv/lib/python3.11/site-packages/sqlalchemy/sql/schema.py", line 462, in _new
-    raise exc.InvalidRequestError(
-sqlalchemy.exc.InvalidRequestError: Table 'students' is already defined for this MetaData instance.  Specify 'extend_existing=True' to redefine options and columns on an existing Table object.
 
-
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
-
-class Student(Base):  # ✅ यह सही indentation है
-    __tablename__ = "students"
-    __table_args__ = {"extend_existing": True}  # ✅ कोई गलत space/tabs नहीं
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    email = Column(String, unique=True, index=True)
+# ✅ नई टेबल बनाने से पहले टेबल्स को अपडेट करें
+Base.metadata.create_all(bind=engine)  

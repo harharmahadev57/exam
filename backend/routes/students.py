@@ -15,3 +15,14 @@ def create_student(name: str, email: str, phone: str, password: str, db: Session
     db.add(new_student)
     db.commit()
     return {"message": "Student created successfully"}
+
+
+
+from fastapi import APIRouter
+from models import Student
+
+router = APIRouter()
+
+@router.get("/")
+async def read_students():
+    return {"message": "Students data"}

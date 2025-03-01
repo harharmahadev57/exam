@@ -101,12 +101,11 @@ sqlalchemy.exc.InvalidRequestError: Table 'students' is already defined for this
 
 
 
-
-
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
+
 class Student(Base):
     __tablename__ = "students"
     __table_args__ = {"extend_existing": True}  # ✅ सही स्पेसिंग

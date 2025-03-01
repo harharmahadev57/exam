@@ -106,9 +106,9 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-class Student(Base):
+class Student(Base):  # ✅ यह सही indentation है
     __tablename__ = "students"
-    __table_args__ = {"extend_existing": True}  # ✅ सही स्पेसिंग
+    __table_args__ = {"extend_existing": True}  # ✅ कोई गलत space/tabs नहीं
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
